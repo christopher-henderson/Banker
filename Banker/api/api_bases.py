@@ -12,7 +12,12 @@ class QueryableAPIView:
 
     SENSITIVE_ATTRIBUTES = frozenset()
 
-    @classmethod
+    def find(self, query):
+        raise NotImplementedError()
+
+    def filter(self, query):
+        raise NotImplementedError()
+
     def sanitize(self, query):
         if self.SENSITIVE_ATTRIBUTES:
             return {k: v for k, v in query.items() if k not in self.SENSITIVE_ATTRIBUTES}
