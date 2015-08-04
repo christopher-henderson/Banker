@@ -1,5 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework.views import ListCreateViewAPI, RetrieveUpdateDestroyAPIView
+from rest_framework.views import (
+    ListCreateViewAPI,
+    RetrieveUpdateDestroyAPIView
+)
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework import authentication
@@ -11,6 +14,8 @@ from common.serializers import *
 class QueryableAPIView:
 
     SENSITIVE_ATTRIBUTES = frozenset()
+    authentication_classes = (authentication.TokenAuthentication,)
+    parser_classes = (JSONParser,)
 
     def find(self, query):
         raise NotImplementedError()
@@ -20,7 +25,10 @@ class QueryableAPIView:
 
     def sanitize(self, query):
         if self.SENSITIVE_ATTRIBUTES:
-            return {k: v for k, v in query.items() if k not in self.SENSITIVE_ATTRIBUTES}
+            return {
+                k: v for k, v in query.items()
+                if k not in self.SENSITIVE_ATTRIBUTES
+            }
         else:
             return query
 
@@ -35,9 +43,6 @@ class QueryableAPIView:
 
 class ObjectView(QueryableAPIView, RetrieveUpdateDestroyAPIView):
 
-    authentication_classes = (authentication.TokenAuthentication,)
-    parser_classes = (JSONParser,)
-
     def find(self, query):
         try:
             query_result = self.get_queryset().get(**self.sanitize(query))
@@ -50,9 +55,6 @@ class ObjectView(QueryableAPIView, RetrieveUpdateDestroyAPIView):
 
 
 class CollectionsView(QueryableAPIView, ListCreateViewAPI):
-
-    authentication_classes = (authentication.TokenAuthentication,)
-    parser_classes = (JSONParser,)
 
     def filter(self, query):
         query_result = self.get_query_set().filter(**self.sanitize(query))
