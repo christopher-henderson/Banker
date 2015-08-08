@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.views import (
+    APIView,
     ListCreateViewAPI,
     RetrieveUpdateDestroyAPIView
 )
@@ -11,7 +12,7 @@ from common.models import *
 from common.serializers import *
 
 
-class QueryableAPIView:
+class QueryableAPIView(APIView):
 
     SENSITIVE_ATTRIBUTES = frozenset()
     authentication_classes = (authentication.TokenAuthentication,)
@@ -41,7 +42,7 @@ class QueryableAPIView:
         return response
 
 
-class ObjectView(QueryableAPIView, RetrieveUpdateDestroyAPIView):
+class ObjectView(QueryableAPIView):
 
     def find(self, query):
         try:
@@ -54,11 +55,11 @@ class ObjectView(QueryableAPIView, RetrieveUpdateDestroyAPIView):
         return self.find(request.GET)
 
 
-class CollectionsView(QueryableAPIView, ListCreateViewAPI):
+class CollectionView(QueryableAPIView):
 
     def filter(self, query):
         query_result = self.get_query_set().filter(**self.sanitize(query))
-        return response_or_404(query_result)
+        return response_or_404(query_result, many=True)
 
     def get(self, request):
-        return self.filter(request.GET, many=True)
+        return self.filter(request.GET)

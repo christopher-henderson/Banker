@@ -1,17 +1,19 @@
-from api.api_bases import ObjectView, CollectionsView
+from api.api_bases import ObjectView, CollectionView
 from common.serializers import TransactionSerializer
+
 
 class TransactionBase:
 
+    SENSITIVE_ATTRIBUTES = frozenset(['account'])
     serializer_class = TransactionSerializer
-    SENSITIVE_ATTRIBUTES = frozenset(['account']) 
 
     def get_queryset(self):
-        return self.request.account.transaction_set.all()  
+        return self.request.account.transaction_set.all()
+
 
 class TransactionObjectView(TransactionBase, ObjectView):
     pass
 
 
-class TransactionCollectionsView(TransactionBase, CollectionsView):
+class TransactionCollectionView(TransactionBase, CollectionView):
     pass
