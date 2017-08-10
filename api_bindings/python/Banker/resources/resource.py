@@ -26,4 +26,3 @@ class Resource(object):
             for attr, dirty in self.db_attrs.items() if dirty
         }
 
-

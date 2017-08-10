@@ -4,7 +4,6 @@ from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
-    
 
 class ObjectView(RetrieveUpdateDestroyAPIView, Queryable):
     authentication_classes = (authentication.TokenAuthentication,)
@@ -19,35 +18,35 @@ class ClassificationView(ObjectView, Queryable):
 
 
 class TimeView(AuthenticatedAPIView, Queryable):
-    
+
     @classmethod
     def sanitize(cls, query):
         return query
 
 
 class BillView(AuthenticatedAPIView, Queryable):
-    
+
     @classmethod
     def sanitize(cls, query):
         return query
 
 
 class VendorView(AuthenticatedAPIView, Queryable):
-    
+
     @classmethod
     def sanitize(cls, query):
         return query
 
 
 class ItemView(AuthenticatedAPIView, Queryable):
-    
+
     @classmethod
     def sanitize(cls, query):
         return query
 
 
 class StatisticView(AuthenticatedAPIView, Queryable):
-    
+
     @classmethod
     def sanitize(cls, query):
         return query
